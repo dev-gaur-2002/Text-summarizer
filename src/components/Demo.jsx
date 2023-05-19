@@ -119,7 +119,9 @@ const Demo = () => {
         {isFetching ? (
           <img src={loader} alt="loading..." />
         ) : error ? (
-          <p>Oops!! that was not supposed to happen .. Please try again !</p>
+          <p>Oops!! that was not supposed to happen .. Please try again !
+            <span>{error?.data?.error}</span>
+          </p>
         ) : (
           article.summary && (
             <div className="flex flex-col gap-2">
