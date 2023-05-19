@@ -10,20 +10,32 @@ const Demo = () => {
     summary:''
   })
 
-  const [getSummary , {error,isFetching}] = useLazyGetSummaryQuery()
+  const [allArticles, setAllArticles] = useState([])
 
+  const [getSummary , {error,isFetching}] = useLazyGetSummaryQuery()
+  
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    const data = await getSummary({articleUrl:article.url});
-
-    if(data?.summary){
-      const newArticle = {...article,summary:data.summary}
-
+    await getSummary({articleUrl:article.url}).then((data)=>{
+      const newArticle = {...article,summary:data.data.summary}
+      const updatedAllArticles = [newArticle, ...allArticles];
+      
       setArticle(newArticle);
+      setAllArticles(updatedAllArticles);
+      console.log(article)
+      console.log("done");
+    }).catch((err)=>{
+      console.log(err)
+    });
 
-      console.log(newArticle);
-    }
   }
+
+  useEffect(()=>{
+    setArticle(article);
+    setAllArticles(allArticles);
+    console.log('article' , article , 'all articles' , allArticles) // testing
+  },[article,setArticle,allArticles,setAllArticles])
+
 
   return (
     <section className='mt-16 w-full max-w-xl'>
